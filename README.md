@@ -105,6 +105,16 @@ do deletion with **regex**
 ubectl get deployment -n foo-ns --no-headers=true | awk '/pattern/{print $1}' | xargs kubectl delete -n foo-ns deployment
 ```
 
+kubectl get elements with **grep**
+```
+kubectl get pod -n foo-ns | grep Evicted
+```
+
+do deletion with **grep**
+```
+kubectl get pod -n foo-ns | grep Evicted awk '{print $1}' | xargs kubectl delete -n foo-ns deployment
+```
+
 kubectl inline cmd
 ```
 kubectl exec --namespace=foo-ns foo-pod -- sh -c 'cmd';
