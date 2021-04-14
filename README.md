@@ -112,7 +112,7 @@ kubectl get pod -n foo-ns | grep Evicted
 
 do deletion with **grep**
 ```
-kubectl get pod -n foo-ns | grep Evicted awk '{print $1}' | xargs kubectl delete -n foo-ns deployment
+kubectl get pod -n foo-ns | grep Evicted | awk '{print $1}' | xargs kubectl delete -n foo-ns pod
 ```
 
 kubectl inline cmd
