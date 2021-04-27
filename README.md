@@ -160,3 +160,27 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 ```
 kubectl top pod foo-pod -n foo-ns
 ```
+
+# Authentication
+
+cmds below can be used to verify if a service account have the premission to do operations in a specific namespaces
+
+check if a service account can create deployment in a ns
+```
+kubectl auth can-i create deployment -n foo-ns --as system:serviceaccount:foo-ns:foo-sa
+```
+
+check if a service account can create service in a ns
+```
+kubectl auth can-i create service -n foo-ns --as system:serviceaccount:foo-ns:foo-sa
+```
+
+check if a service account can delete deployment in a ns
+```
+kubectl auth can-i delete deployment -n foo-ns --as system:serviceaccount:foo-ns:foo-sa
+```
+
+check if a service account can get deployments in a ns
+```
+kubectl auth can-i get deployment -n foo-ns --as system:serviceaccount:foo-ns:foo-sa
+```
