@@ -83,6 +83,11 @@ kubectl list pod
 kubectl get pod -n foo-ns
 ```
 
+kubectl list pod in all namespace
+```
+kubectl get pods --all-namespaces
+```
+
 kubectl list pod with selector
 ```
 kubectl get pod --selector key=value
