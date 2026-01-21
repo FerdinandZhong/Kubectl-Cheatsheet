@@ -102,12 +102,12 @@ kubectl get svc -n foo-ns
 kubectl list element with **regex**
 
 ```
-ubectl get deployment -n foo-ns --no-headers=true | awk '/pattern/{print $1}'
+kubectl get deployment -n foo-ns --no-headers=true | awk '/pattern/{print $1}'
 ```
 
 do deletion with **regex**
 ```
-ubectl get deployment -n foo-ns --no-headers=true | awk '/pattern/{print $1}' | xargs kubectl delete -n foo-ns deployment
+kubectl get deployment -n foo-ns --no-headers=true | awk '/pattern/{print $1}' | xargs kubectl delete -n foo-ns deployment
 ```
 
 kubectl get elements with **grep**
@@ -123,6 +123,58 @@ kubectl get pod -n foo-ns | grep Evicted | awk '{print $1}' | xargs kubectl dele
 kubectl inline cmd
 ```
 kubectl exec --namespace=foo-ns foo-pod -- sh -c 'cmd';
+```
+
+## Pod Logs and Processes
+
+view pod logs
+```
+kubectl logs pod-name -n foo-ns
+```
+
+view logs from the previous container instance (useful for crashed pods)
+```
+kubectl logs pod-name -n foo-ns --previous
+```
+
+stream logs in real-time
+```
+kubectl logs -f pod-name -n foo-ns
+```
+
+view logs from a specific container in a multi-container pod
+```
+kubectl logs pod-name -c container-name -n foo-ns
+```
+
+show logs from the last hour
+```
+kubectl logs pod-name --since=1h -n foo-ns
+```
+
+show logs since a specific time
+```
+kubectl logs pod-name --since-time=2024-01-21T10:00:00Z -n foo-ns
+```
+
+execute a command in a pod and get interactive shell
+```
+kubectl exec -it pod-name -n foo-ns -- /bin/bash
+```
+
+execute a command in a specific container (multi-container pod)
+```
+kubectl exec -it pod-name -c container-name -n foo-ns -- /bin/bash
+```
+
+get running processes inside a pod
+```
+kubectl exec pod-name -n foo-ns -- ps aux
+```
+
+get environment variables in a pod
+```
+kubectl exec pod-name -n foo-ns -- env
 ```
 
 ## Rollout Commands
@@ -188,4 +240,87 @@ kubectl auth can-i delete deployment -n foo-ns --as system:serviceaccount:foo-ns
 check if a service account can get deployments in a ns
 ```
 kubectl auth can-i get deployment -n foo-ns --as system:serviceaccount:foo-ns:foo-sa
+```
+
+# Describing and Inspecting Resources
+
+get detailed information about a resource
+```
+kubectl describe pod pod-name -n foo-ns
+```
+
+get detailed information about a deployment
+```
+kubectl describe deployment deployment-name -n foo-ns
+```
+
+get detailed information about a node
+```
+kubectl describe node node-name
+```
+
+get resource in YAML format
+```
+kubectl get pod pod-name -n foo-ns -o yaml
+```
+
+get resource in JSON format
+```
+kubectl get pod pod-name -n foo-ns -o json
+```
+
+# Troubleshooting
+
+check pod status and events
+```
+kubectl get pod pod-name -n foo-ns -o wide
+```
+
+get events in a namespace to understand what's happening
+```
+kubectl get events -n foo-ns --sort-by='.lastTimestamp'
+```
+
+debug a pod by creating a debug container
+```
+kubectl debug pod-name -n foo-ns -it --image=busybox
+```
+
+port-forward to access a service locally
+```
+kubectl port-forward pod-name 8080:8080 -n foo-ns
+```
+
+port-forward to a service
+```
+kubectl port-forward svc/service-name 8080:8080 -n foo-ns
+```
+
+# Scaling and Managing Deployments
+
+scale a deployment
+```
+kubectl scale deployment deployment-name --replicas=3 -n foo-ns
+```
+
+update deployment image
+```
+kubectl set image deployment/deployment-name container-name=new-image:tag -n foo-ns
+```
+
+# Label and Annotation Management
+
+update or add a label to a resource
+```
+kubectl label pod pod-name key=value -n foo-ns
+```
+
+remove a label from a resource
+```
+kubectl label pod pod-name key- -n foo-ns
+```
+
+update or add an annotation to a resource
+```
+kubectl annotate pod pod-name key=value -n foo-ns
 ```
