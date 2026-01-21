@@ -308,6 +308,41 @@ update deployment image
 kubectl set image deployment/deployment-name container-name=new-image:tag -n foo-ns
 ```
 
+check HorizontalPodAutoscaler (HPA) configuration
+```
+kubectl get hpa -n foo-ns
+```
+
+get detailed HPA configuration
+```
+kubectl describe hpa hpa-name -n foo-ns
+```
+
+get HPA metrics in YAML format
+```
+kubectl get hpa hpa-name -n foo-ns -o yaml
+```
+
+check current metrics for a replicaset/deployment (requires metrics-server)
+```
+kubectl top rs replicaset-name -n foo-ns
+```
+
+check current CPU and memory metrics for a deployment
+```
+kubectl top deployment deployment-name -n foo-ns
+```
+
+create HPA for a deployment (scale based on CPU)
+```
+kubectl autoscale deployment deployment-name --min=2 --max=10 --cpu-percent=80 -n foo-ns
+```
+
+check HPA status and current metrics
+```
+kubectl get hpa hpa-name -n foo-ns -w
+```
+
 # Label and Annotation Management
 
 update or add a label to a resource
